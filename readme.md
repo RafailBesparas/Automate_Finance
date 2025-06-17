@@ -4,6 +4,7 @@ A Streamlit-based web application for managing and visualizing personal financia
 It enables categorization of expenses and income, interactive editing, and insightful charting.
 
 > 🧠 **Version 1 inspired by the YouTube series by [Tech With Tim](https://www.youtube.com/@TechWithTim)**.
+> Next target to write all this app in FastAPI
 
 ---
 
