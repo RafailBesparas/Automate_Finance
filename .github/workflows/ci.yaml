@@ -1,0 +1,46 @@
+name: CI CD Builder
+
+# I want my action to work on the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+# First job
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    # Check out the code code
+    - name: Check out repository
+      uses: actions/checkout@v4
+
+    # Set up Python version
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: "pip"
+
+    # Install dependencies
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        # basic dev tools
+        pip install flake8 pytest
+
+    # Lint (fails build on style errors)
+    - name: Run flake8
+      run: |
+        # Ignore Streamlit config warnings & long lines in CSV paths
+        flake8 --max-line-length 120
+
+    #  Run tests when I add them
+    - name: Run pytest (if tests exist)
+      run: |
+        if [ -d tests ]; then pytest -q; else echo "No tests yet – skipping"; fi
